@@ -211,16 +211,16 @@ The application is configured for easy deployment on platforms like Netlify or V
    npm run build
    ```
 
-3. **Deploy to Vercel:**
+2. **Deploy to Vercel:**
    - Connect your GitHub repository
    - Vercel will automatically detect Vite and configure the build
-
 
 ## 📄 License
 
 This project is part of a technical assessment.
 
 ## 👤 Author
+
 Sushant R. Dangal
 
 Built as part of a technical assessment demonstrating React, Redux, and modern web development practices.
