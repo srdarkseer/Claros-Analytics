@@ -1,30 +1,42 @@
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { fetchUsersAsync, fetchPostsAsync, clearError } from '@/store/slices/dataSlice';
-import { selectDataItems, selectIsLoading, selectDataError } from '@/store/selectors';
+import { resetPagination } from '@/store/slices/paginationSlice';
+import {
+  selectIsLoading,
+  selectDataError,
+  selectFilteredData,
+  selectPaginatedData,
+} from '@/store/selectors';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertCircle, Loader2, Users, FileText } from 'lucide-react';
 import { DataTable } from './components/DataTable';
+import { SearchFilter } from './components/SearchFilter';
+import { DataPagination } from './components/DataPagination';
 
 export default function Data() {
   const dispatch = useAppDispatch();
-  const items = useAppSelector(selectDataItems);
+  const filteredData = useAppSelector(selectFilteredData);
+  const paginatedData = useAppSelector(selectPaginatedData);
   const isLoading = useAppSelector(selectIsLoading);
   const error = useAppSelector(selectDataError);
 
   useEffect(() => {
     // Fetch users by default
     dispatch(fetchUsersAsync());
+    dispatch(resetPagination());
   }, [dispatch]);
 
   const handleFetchUsers = () => {
     dispatch(clearError());
+    dispatch(resetPagination());
     dispatch(fetchUsersAsync());
   };
 
   const handleFetchPosts = () => {
     dispatch(clearError());
+    dispatch(resetPagination());
     dispatch(fetchPostsAsync());
   };
 
@@ -73,19 +85,26 @@ export default function Data() {
         </Alert>
       )}
 
-      {isLoading && items.length === 0 ? (
+      <SearchFilter />
+
+      {isLoading && filteredData.length === 0 ? (
         <div className="flex items-center justify-center py-12">
           <Loader2 className="size-8 animate-spin text-muted-foreground" />
           <span className="ml-2 text-sm sm:text-base text-muted-foreground">Loading data...</span>
         </div>
-      ) : items.length > 0 ? (
-        <DataTable data={items} />
+      ) : filteredData.length > 0 ? (
+        <>
+          <DataTable data={paginatedData} />
+          <DataPagination totalItems={filteredData.length} />
+        </>
       ) : (
         <Alert>
           <AlertCircle className="size-4" />
           <AlertTitle>No Data</AlertTitle>
           <AlertDescription className="text-sm sm:text-base">
-            Click one of the buttons above to load data from the API.
+            {filteredData.length === 0 && !isLoading
+              ? 'Click one of the buttons above to load data from the API.'
+              : 'No results found. Try adjusting your search query.'}
           </AlertDescription>
         </Alert>
       )}
