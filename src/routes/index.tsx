@@ -4,9 +4,8 @@ import { useRoutes, Navigate } from 'react-router-dom';
 import BlankLayout from '@/layouts/BlankLayout';
 import MainLayout from '@/layouts/MainLayout';
 
-// Pages - You can add your pages here
-// import Login from "@/pages/Auth/Login/Login";
-// import Dashboard from "@/pages/Dashboard/Dashboard";
+// Pages
+import Data from '@/pages/Data/Data';
 
 export default function ThemeRoutes() {
   const routes = [
@@ -41,22 +40,17 @@ export default function ThemeRoutes() {
         {
           path: 'home',
           element: (
-            <div className="p-6">
-              <h1 className="text-2xl font-bold mb-4">Home</h1>
-              <p className="text-muted-foreground">Welcome to Claros Analytics Dashboard</p>
+            <div className="p-4 sm:p-6">
+              <h1 className="text-2xl sm:text-3xl font-bold mb-4">Home</h1>
+              <p className="text-sm sm:text-base text-muted-foreground">
+                Welcome to Claros Analytics Dashboard
+              </p>
             </div>
           ),
         },
         {
           path: 'data',
-          element: (
-            <div className="p-6">
-              <h1 className="text-2xl font-bold mb-4">Data</h1>
-              <p className="text-muted-foreground">
-                Data table with API integration will be displayed here
-              </p>
-            </div>
-          ),
+          element: <Data />,
         },
       ],
     },

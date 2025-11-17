@@ -27,6 +27,7 @@ import {
 // Data selectors
 export const selectDataItems = (state: RootState) => selectDataItemsBase(state);
 export const selectIsLoading = (state: RootState) => selectIsLoadingBase(state);
+export const selectDataError = (state: RootState) => state.data.error;
 export const selectLastFetched = (state: RootState) => selectLastFetchedBase(state);
 export const selectDataItemById = (state: RootState, id: number | string) =>
   selectDataItemByIdBase(state, id);
@@ -77,7 +78,8 @@ export const selectFilteredData = (state: RootState) => {
 
     // Additional filters
     for (const [key, filterValue] of Object.entries(filters)) {
-      if (item[key] !== filterValue) {
+      const itemValue = (item as unknown as Record<string, unknown>)[key];
+      if (itemValue !== filterValue) {
         return false;
       }
     }
