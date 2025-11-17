@@ -98,3 +98,8 @@ export const selectPaginatedData = (state: RootState) => {
 
   return filteredData.slice(startIndex, endIndex);
 };
+
+// Helper selector to get total items count for filtered data
+export const selectFilteredDataCount = (state: RootState) => {
+  return selectFilteredData(state).length;
+};
