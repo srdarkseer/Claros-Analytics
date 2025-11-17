@@ -28,6 +28,7 @@ import {
 export const selectDataItems = (state: RootState) => selectDataItemsBase(state);
 export const selectIsLoading = (state: RootState) => selectIsLoadingBase(state);
 export const selectDataError = (state: RootState) => state.data.error;
+export const selectRetryCount = (state: RootState) => state.data.retryCount;
 export const selectLastFetched = (state: RootState) => selectLastFetchedBase(state);
 export const selectDataItemById = (state: RootState, id: number | string) =>
   selectDataItemByIdBase(state, id);

@@ -1,12 +1,16 @@
 import type { User, Post } from '@/types/api';
+import { retryWithBackoff } from '@/utils/retry';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://jsonplaceholder.typicode.com';
 
+const DEFAULT_RETRY_ATTEMPTS = 3;
+const DEFAULT_RETRY_DELAY = 1000;
+
 /**
- * Generic API fetch function with error handling
+ * Generic API fetch function with error handling and retry mechanism
  */
-async function fetchAPI<T>(endpoint: string): Promise<T> {
-  try {
+async function fetchAPI<T>(endpoint: string, retryAttempts = DEFAULT_RETRY_ATTEMPTS): Promise<T> {
+  const fetchData = async (): Promise<T> => {
     const response = await fetch(`${API_BASE_URL}${endpoint}`);
 
     if (!response.ok) {
@@ -15,6 +19,10 @@ async function fetchAPI<T>(endpoint: string): Promise<T> {
 
     const data = await response.json();
     return data;
+  };
+
+  try {
+    return await retryWithBackoff(fetchData, retryAttempts, DEFAULT_RETRY_DELAY);
   } catch (error) {
     if (error instanceof Error) {
       throw new Error(`API Error: ${error.message}`);

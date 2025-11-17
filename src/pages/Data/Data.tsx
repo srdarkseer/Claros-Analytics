@@ -1,16 +1,23 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { fetchUsersAsync, fetchPostsAsync, clearError } from '@/store/slices/dataSlice';
+import {
+  fetchUsersAsync,
+  fetchPostsAsync,
+  clearError,
+  retryFetchUsers,
+  retryFetchPosts,
+} from '@/store/slices/dataSlice';
 import { resetPagination } from '@/store/slices/paginationSlice';
 import {
   selectIsLoading,
   selectDataError,
   selectFilteredData,
   selectPaginatedData,
+  selectRetryCount,
 } from '@/store/selectors';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { AlertCircle, Loader2, Users, FileText } from 'lucide-react';
+import { AlertCircle, Loader2, Users, FileText, RefreshCw } from 'lucide-react';
 import { DataTable } from './components/DataTable';
 import { SearchFilter } from './components/SearchFilter';
 import { DataPagination } from './components/DataPagination';
@@ -21,23 +28,37 @@ export default function Data() {
   const paginatedData = useAppSelector(selectPaginatedData);
   const isLoading = useAppSelector(selectIsLoading);
   const error = useAppSelector(selectDataError);
+  const retryCount = useAppSelector(selectRetryCount);
+  const [lastFetchType, setLastFetchType] = useState<'users' | 'posts' | null>(null);
 
   useEffect(() => {
     // Fetch users by default
     dispatch(fetchUsersAsync());
     dispatch(resetPagination());
+    setLastFetchType('users');
   }, [dispatch]);
 
   const handleFetchUsers = () => {
     dispatch(clearError());
     dispatch(resetPagination());
     dispatch(fetchUsersAsync());
+    setLastFetchType('users');
   };
 
   const handleFetchPosts = () => {
     dispatch(clearError());
     dispatch(resetPagination());
     dispatch(fetchPostsAsync());
+    setLastFetchType('posts');
+  };
+
+  const handleRetry = () => {
+    dispatch(clearError());
+    if (lastFetchType === 'users') {
+      dispatch(retryFetchUsers());
+    } else if (lastFetchType === 'posts') {
+      dispatch(retryFetchPosts());
+    }
   };
 
   return (
@@ -81,7 +102,28 @@ export default function Data() {
         <Alert variant="destructive">
           <AlertCircle className="size-4" />
           <AlertTitle>Error</AlertTitle>
-          <AlertDescription>{error}</AlertDescription>
+          <AlertDescription className="space-y-2">
+            <p>{error}</p>
+            {retryCount > 0 && retryCount < 3 && (
+              <p className="text-xs text-muted-foreground">
+                Manual retry attempt: {retryCount} of 3
+              </p>
+            )}
+            <Button
+              onClick={handleRetry}
+              disabled={isLoading || retryCount >= 3}
+              variant="outline"
+              size="sm"
+              className="mt-2 gap-2"
+            >
+              {isLoading ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : (
+                <RefreshCw className="size-4" />
+              )}
+              {retryCount >= 3 ? 'Max retries reached' : 'Retry'}
+            </Button>
+          </AlertDescription>
         </Alert>
       )}
 
