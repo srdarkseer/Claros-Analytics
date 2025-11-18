@@ -6,7 +6,7 @@ export interface PaginationState {
   totalItems: number;
 }
 
-const initialState: PaginationState = {
+export const initialState: PaginationState = {
   currentPage: 1,
   itemsPerPage: 10,
   totalItems: 0,

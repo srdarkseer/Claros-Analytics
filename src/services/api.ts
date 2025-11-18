@@ -1,7 +1,6 @@
 import type { User, Post } from '@/types/api';
 import { retryWithBackoff } from '@/utils/retry';
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://jsonplaceholder.typicode.com';
+import { API_BASE_URL } from '@/config/api';
 
 const DEFAULT_RETRY_ATTEMPTS = 3;
 const DEFAULT_RETRY_DELAY = 1000;

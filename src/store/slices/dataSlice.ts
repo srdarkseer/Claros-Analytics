@@ -12,7 +12,7 @@ export interface DataState {
   retryCount: number;
 }
 
-const initialState: DataState = {
+export const initialState: DataState = {
   items: [],
   isLoading: false,
   error: null,

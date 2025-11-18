@@ -5,7 +5,7 @@ export interface FilterState {
   filters: Record<string, unknown>;
 }
 
-const initialState: FilterState = {
+export const initialState: FilterState = {
   searchQuery: '',
   filters: {},
 };
