@@ -103,7 +103,7 @@ export function DataTable({ data }: DataTableProps) {
   // Desktop table view
   const desktopView = (
     <div className="hidden sm:block rounded-md border overflow-x-auto">
-      <Table>
+      <Table data-testid="data-table">
         {isUserData ? (
           <>
             <TableHeader>
@@ -168,9 +168,9 @@ export function DataTable({ data }: DataTableProps) {
   );
 
   return (
-    <>
+    <div data-testid="data-container">
       {mobileView}
       {desktopView}
-    </>
+    </div>
   );
 }

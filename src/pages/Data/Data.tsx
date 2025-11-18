@@ -115,6 +115,7 @@ export default function Data() {
               variant="outline"
               size="sm"
               className="mt-2 gap-2"
+              data-testid="retry-button"
             >
               {isLoading ? (
                 <Loader2 className="size-4 animate-spin" />
@@ -130,7 +131,7 @@ export default function Data() {
       <SearchFilter />
 
       {isLoading && filteredData.length === 0 ? (
-        <div className="flex items-center justify-center py-12">
+        <div className="flex items-center justify-center py-12" data-testid="loading">
           <Loader2 className="size-8 animate-spin text-muted-foreground" />
           <span className="ml-2 text-sm sm:text-base text-muted-foreground">Loading data...</span>
         </div>

@@ -102,7 +102,7 @@ export function DataPagination({ totalItems }: DataPaginationProps) {
   }
 
   return (
-    <div className="flex flex-col gap-4 border-t pt-4">
+    <div className="flex flex-col gap-4 border-t pt-4" data-testid="pagination">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-2">
           <Label htmlFor="items-per-page" className="text-sm whitespace-nowrap">
